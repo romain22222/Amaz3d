@@ -4,6 +4,7 @@ height = 800
 def movejoueur(persovar):
     'on bouge le joueur'
     keys = pygame.key.get_pressed()
+    " si la touche est appuyé et si on ne sort pas de la fenêtre"
     if keys[pygame.K_UP] and persovar[1]-10>0:
         bouger=persovar.move([0,-10])
     elif keys[pygame.K_DOWN] and persovar[1]+persovar[3]+10<height:
