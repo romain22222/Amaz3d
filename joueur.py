@@ -1,6 +1,6 @@
 import sys, time, pygame
-width = 1200
-height = 800
+
+
 def movejoueur(persovar):
     keys = pygame.key.get_pressed()
     
@@ -16,5 +16,5 @@ def movejoueur(persovar):
         bouger=persovar.move([0,0])
     return bouger
 
-    
+
 
