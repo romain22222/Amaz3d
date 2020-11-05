@@ -1,26 +1,18 @@
 import pygame
-import numpy
 import random
+
+from constantes import *
+from projetVisi import screen
 pygame.init()
 
 done = False
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
 
 cols = rows = 12
 
-width = 600
-height = 600
-wr = width/cols
-hr = height/rows
-
-screen = pygame.display.set_mode([width, height])
-pygame.display.set_caption("Labyrinthe V1")
-clock = pygame.time.Clock()
-
+widthPcnt = 0.3
+heightPcnt = 0.8
+wr = widthPcnt*width/cols
+hr = heightPcnt*height/rows
 
 class Spot:
     def __init__(self, x, y):
@@ -86,42 +78,36 @@ def breakwalls(a, b):
         grid[b.x][b.y].walls[2] = False
 
 
-while not done:
-    clock.tick(1000000)
-    screen.fill(BLACK)
+screen.fill(BLACK)
+if not completed:
+    grid[current.x][current.y].visited = True
+    got_new = False
+    temp = 10
+
+    while not got_new and not completed:
+        r = random.randint(0, len(current.neighbors)-1)
+        Tempcurrent = current.neighbors[r]
+        if not Tempcurrent.visited:
+            visited.append(current)
+            current = Tempcurrent
+            got_new = True
+        if temp == 0:
+            temp = 10
+            if len(visited) == 0:
+                completed = True
+                break
+            else:
+                current = visited.pop()
+        temp = temp - 1
+
     if not completed:
-        grid[current.x][current.y].visited = True
-        got_new = False
-        temp = 10
+        breakwalls(current, visited[len(visited)-1])
 
-        while not got_new and not completed:
-            r = random.randint(0, len(current.neighbors)-1)
-            Tempcurrent = current.neighbors[r]
-            if not Tempcurrent.visited:
-                visited.append(current)
-                current = Tempcurrent
-                got_new = True
-            if temp == 0:
-                temp = 10
-                if len(visited) == 0:
-                    completed = True
-                    break
-                else:
-                    current = visited.pop()
-            temp = temp - 1
+    for i in range(rows):
+        for j in range(cols):
+            grid[i][j].show(WHITE)
+            grid[i][j].show_block(BLACK)
 
-        if not completed:
-            breakwalls(current, visited[len(visited)-1])
-
-        for i in range(rows):
-            for j in range(cols):
-                grid[i][j].show(WHITE)
-                grid[i][j].show_block(BLACK)
-
-        current.visited = True
-        current.show_block(BLACK)
-        pygame.display.flip()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
+    current.visited = True
+    current.show_block(BLACK)
+    pygame.display.flip()
