@@ -1,7 +1,7 @@
 import sys, time, pygame
 from joueur import *
 from constantes import *
-
+from labyrinthe import *
 # https://fr.wikibooks.org/wiki/Pygame/Version_imprimable
 # https://www.pygame.org/docs/ref/key.html#pygame.key.name
 # https://github.com/TheAwesomePossum/StartPy/blob/3d6c824259fdf4e9e78e3138d2c9c0fecedf645f/Events.py
@@ -19,7 +19,7 @@ perso = pygame.transform.rotozoom(perso, 0, 0.25)
 persovar = perso.get_rect()         
 persovar = persovar.move([600,500])
 pygame.key.set_repeat(60, 60)
-
+createLaby()
 
 while 1:
 
@@ -32,7 +32,7 @@ while 1:
         
 
     screen.fill(black)
-
+    printLaby()
     screen.blit(perso, persovar)
 
     time.sleep(0.01)

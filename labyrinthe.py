@@ -89,12 +89,12 @@ def createLaby(cols = 6, rows = 6, widthPcnt = 0.3, heightPcnt = 0.8, gridInitPo
 
         if not completed:
             breakwalls(current, visited[len(visited)-1])
+        current.visited = True
+
 def printLaby():
     for i in range(rows):
         for j in range(cols):
             grid[i][j].show(WHITE)
             grid[i][j].show_block(BLACK)
 
-    current.visited = True
-    current.show_block(BLACK)
-    pygame.display.flip()
+
