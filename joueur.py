@@ -1,5 +1,5 @@
 import sys, time, pygame
-
+from constantes import * 
 
 def movejoueur(persovar):
     keys = pygame.key.get_pressed()
