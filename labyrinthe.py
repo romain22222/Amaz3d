@@ -2,7 +2,7 @@ import pygame
 import random
 
 from constantes import *
-from projetVisi import *
+from projetVisi import screen
 pygame.init()
 
 done = False
