@@ -13,21 +13,21 @@ class Spot:
         self.visited = False
         self.walls = [True, True, True, True]
         
-    def show(self, color=BLACK):
+    def show(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color=BLACK):
         if self.walls[0]:
-            pygame.draw.line(screen, color, [self.x*hr, self.y*wr],       [self.x*hr+hr, self.y*wr], 2)
+            pygame.draw.line(screen, color, [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY],       [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
         if self.walls[1]:
-            pygame.draw.line(screen, color, [self.x*hr+hr, self.y*wr],    [self.x*hr+hr, self.y*wr + wr], 2)
+            pygame.draw.line(screen, color, [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY],    [self.x*hr+hr+leftTopCornerX, self.y*wr + wr+leftTopCornerY], 2)
         if self.walls[2]:
-            pygame.draw.line(screen, color, [self.x*hr+hr, self.y*wr+wr], [self.x*hr, self.y*wr+wr], 2)
+            pygame.draw.line(screen, color, [self.x*hr+hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], 2)
         if self.walls[3]:
-            pygame.draw.line(screen, color, [self.x*hr, self.y*wr+wr],    [self.x*hr, self.y*wr], 2)
+            pygame.draw.line(screen, color, [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY],    [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
 
-    def show_block(self, color):
+    def show_block(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color):
         if self.visited:
             pygame.draw.rect(screen, color, [self.x*hr+2, self.y*wr+2, hr-2, wr-2])
 
-    def add_neighbors(self):
+    def add_neighbors(self, rows, cols, grid):
         if self.x > 0:
             self.neighbors.append(grid[self.x - 1][self.y])
         if self.y > 0:
@@ -36,16 +36,16 @@ class Spot:
             self.neighbors.append(grid[self.x + 1][self.y])
         if self.y < cols - 1:
             self.neighbors.append(grid[self.x][self.y + 1])
-def createLaby(cols = 6, rows = 6, widthPcnt = 0.3, heightPcnt = 0.8, gridInitPosCol= int(random.random()*cols), gridInitPosRow= int(random.random()*rows))
+def createLaby(rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0):
+    #gridInitPosCol = int(random.random()*cols)
+    #gridInitPosRow = int(random.random()*rows)
     pygame.init()
     done = False
-    wr = widthPcnt*width/cols
-    hr = heightPcnt*height/rows
     grid = [[Spot(i, j) for j in range(cols)] for i in range(rows)]
 
     for i in range(rows):
         for j in range(cols):
-            grid[i][j].add_neighbors()
+            grid[i][j].add_neighbors(rows, cols, grid)
 
     current = grid[gridInitPosCol][gridInitPosRow]
     visited = [current]
@@ -65,8 +65,7 @@ def createLaby(cols = 6, rows = 6, widthPcnt = 0.3, heightPcnt = 0.8, gridInitPo
         if a.x == b.x and a.y > b.y:
             grid[a.x][a.y].walls[0] = False
             grid[b.x][b.y].walls[2] = False
-
-    if not completed:
+    while not completed:
         grid[current.x][current.y].visited = True
         got_new = False
         temp = 10
@@ -90,11 +89,14 @@ def createLaby(cols = 6, rows = 6, widthPcnt = 0.3, heightPcnt = 0.8, gridInitPo
         if not completed:
             breakwalls(current, visited[len(visited)-1])
         current.visited = True
+    return grid
 
-def printLaby():
+def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
+    wr = widthPcnt*width/cols
+    hr = heightPcnt*height/rows
     for i in range(rows):
         for j in range(cols):
-            grid[i][j].show(WHITE)
-            grid[i][j].show_block(BLACK)
+            grid[i][j].show(screen, wr, hr, leftTopCornerX, leftTopCornerY, WHITE)
+            grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLACK)
 
 

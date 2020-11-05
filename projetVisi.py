@@ -19,7 +19,8 @@ perso = pygame.transform.rotozoom(perso, 0, 0.25)
 persovar = perso.get_rect()         
 persovar = persovar.move([600,500])
 pygame.key.set_repeat(60, 60)
-createLaby()
+gridLaby = createLaby(100,100)
+gridLaby2 = createLaby(100,100)
 
 while 1:
 
@@ -32,7 +33,8 @@ while 1:
         
 
     screen.fill(black)
-    printLaby()
+    printLaby(gridLaby, screen, 100, 100)
+    printLaby(gridLaby2, screen, 100, 100, 500, 300)
     screen.blit(perso, persovar)
 
     time.sleep(0.01)
