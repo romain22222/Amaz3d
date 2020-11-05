@@ -1,6 +1,8 @@
 import pygame
 import random
+
 from constantes import *
+from projetVisi import *
 pygame.init()
 
 done = False
