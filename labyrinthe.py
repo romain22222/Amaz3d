@@ -12,6 +12,7 @@ class Spot:
         self.neighbors = []
         self.visited = False
         self.walls = [True, True, True, True]
+        self.typeCase = "Path"
         
     def show(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color=BLACK):
         if self.walls[0]:
@@ -76,12 +77,12 @@ def createLaby(rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0):
             if not Tempcurrent.visited:
                 visited.append(current)
                 current = Tempcurrent
+                print(current)
                 got_new = True
             if temp == 0:
                 temp = 10
                 if len(visited) == 0:
                     completed = True
-                    break
                 else:
                     current = visited.pop()
             temp = temp - 1
