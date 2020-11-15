@@ -12,7 +12,7 @@ class Spot:
         self.neighbors = []
         self.visited = False
         self.walls = [True, True, True, True]
-        self.typeCase = "Path"
+        self.typeCase = "end"
         
     def show(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color=BLACK):
         if self.walls[0]:
@@ -25,8 +25,7 @@ class Spot:
             pygame.draw.line(screen, color, [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY],    [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
 
     def show_block(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color):
-        if self.visited:
-            pygame.draw.rect(screen, color, [self.x*hr+2, self.y*wr+2, hr-2, wr-2])
+        pygame.draw.rect(screen, color, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
 
     def add_neighbors(self, rows, cols, grid):
         if self.x > 0:
@@ -37,7 +36,7 @@ class Spot:
             self.neighbors.append(grid[self.x + 1][self.y])
         if self.y < cols - 1:
             self.neighbors.append(grid[self.x][self.y + 1])
-def createLaby(rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0):
+def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0):
     #gridInitPosCol = int(random.random()*cols)
     #gridInitPosRow = int(random.random()*rows)
     pygame.init()
@@ -77,19 +76,23 @@ def createLaby(rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0):
             if not Tempcurrent.visited:
                 visited.append(current)
                 current = Tempcurrent
-                print(current)
                 got_new = True
             if temp == 0:
-                temp = 10
+                temp = 22
                 if len(visited) == 0:
                     completed = True
                 else:
                     current = visited.pop()
+                    for neighb in current.neighbors:
+                        if not neighb=="end":
+                            current.typeCase="path"
             temp = temp - 1
 
         if not completed:
             breakwalls(current, visited[len(visited)-1])
         current.visited = True
+    grid[gridInitPosCol][gridInitPosRow].typeCase="init"
+    addEntreeSortie(grid, layer)
     return grid
 
 def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
@@ -98,6 +101,37 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
     for i in range(rows):
         for j in range(cols):
             grid[i][j].show(screen, wr, hr, leftTopCornerX, leftTopCornerY, WHITE)
-            grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLACK)
+            if grid[i][j].typeCase=="end":
+                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLUE)
+            elif grid[i][j].typeCase=="start":
+                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, GREEN)
+            elif grid[i][j].typeCase=="nextup":
+                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, LIGHTGRAY)
+            elif grid[i][j].typeCase=="nextdown":
+                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, DARKGRAY)
+            elif grid[i][j].typeCase=="final":
+                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, RED)
+            else:
+                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLACK)
+            
 
 
+def addEntreeSortie(grid, layer):
+    ends=[]
+    for i in range(len(grid)):
+        for j in range(len(grid[i])):
+            if grid[i][j].typeCase=="end":
+                ends.append(grid[i][j])
+            if grid[i][j].typeCase=="init":
+                initCase=grid[i][j]
+    if layer<len(grid)-1:
+        chosenCase=random.randint(0,len(ends)-1)
+        ends[chosenCase].typeCase="nextup"
+    else:
+        chosenCase=random.randint(0,len(ends)-1)
+        ends[chosenCase].typeCase="final"
+    if layer!=0:
+        initCase.typeCase="nextdown"
+    else:
+        initCase.typeCase="start"
+        

@@ -19,8 +19,20 @@ perso = pygame.transform.rotozoom(perso, 0, 0.25)
 persovar = perso.get_rect()         
 persovar = persovar.move([600,500])
 pygame.key.set_repeat(60, 60)
-gridLaby = createLaby(6,6)
-# gridLaby2 = createLaby(100,100)
+tailleLabyCube=6
+grids=[]
+caseInit=[2,2]
+for i in range(tailleLabyCube):
+    done=False
+    grids.append(createLaby(i,tailleLabyCube,tailleLabyCube,caseInit[0],caseInit[1]))
+    for x in range(len(grids[i])):
+        for y in range(len(grids[i][x])):
+            if grids[i][x][y].typeCase=="nextup":
+                caseInit=[grids[i][x][y].x,grids[i][x][y].y]
+                done=True
+                break
+        if done:
+            break
 
 while 1:
 
@@ -33,8 +45,11 @@ while 1:
         
 
     screen.fill(black)
-    printLaby(gridLaby, screen, 6, 6)
-    # printLaby(gridLaby2, screen, 100, 100, 500, 300)
+    X=0
+    Y=0
+    for grid in grids:
+        printLaby(grid, screen, tailleLabyCube, tailleLabyCube, X, Y, 0.2, 0.2)
+        X+=200
     screen.blit(perso, persovar)
 
     time.sleep(0.01)
