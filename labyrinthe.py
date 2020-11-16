@@ -6,26 +6,33 @@ class Spot:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.f = 0
-        self.g = 0
-        self.h = 0
+        self.hidden = False
         self.neighbors = []
         self.visited = False
         self.walls = [True, True, True, True]
         self.typeCase = "end"
         
     def show(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color=BLACK):
-        if self.walls[0]:
-            pygame.draw.line(screen, color, [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY],       [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
-        if self.walls[1]:
-            pygame.draw.line(screen, color, [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY],    [self.x*hr+hr+leftTopCornerX, self.y*wr + wr+leftTopCornerY], 2)
-        if self.walls[2]:
-            pygame.draw.line(screen, color, [self.x*hr+hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], 2)
-        if self.walls[3]:
-            pygame.draw.line(screen, color, [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY],    [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
+        if self.hidden:
+            pygame.draw.line(screen, ORANGE, [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY],       [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
+            pygame.draw.line(screen, ORANGE, [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY],    [self.x*hr+hr+leftTopCornerX, self.y*wr + wr+leftTopCornerY], 2)
+            pygame.draw.line(screen, ORANGE, [self.x*hr+hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], 2)
+            pygame.draw.line(screen, ORANGE, [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY],    [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
+        else:
+            if self.walls[0]:
+                pygame.draw.line(screen, color, [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY],       [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
+            if self.walls[1]:
+                pygame.draw.line(screen, color, [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY],    [self.x*hr+hr+leftTopCornerX, self.y*wr + wr+leftTopCornerY], 2)
+            if self.walls[2]:
+                pygame.draw.line(screen, color, [self.x*hr+hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], 2)
+            if self.walls[3]:
+                pygame.draw.line(screen, color, [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY],    [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
 
     def show_block(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color):
-        pygame.draw.rect(screen, color, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
+        if self.hidden:
+            pygame.draw.rect(screen, ORANGE, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
+        else:
+            pygame.draw.rect(screen, color, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
 
     def add_neighbors(self, rows, cols, grid):
         if self.x > 0:
@@ -135,3 +142,27 @@ def addEntreeSortie(grid, layer):
     else:
         initCase.typeCase="start"
         
+def createCubicLaby(size):
+    grids=[]
+    caseInit=[random.randint(0,size-1),random.randint(0,size-1)]
+    for i in range(size):
+        done=False
+        grids.append(createLaby(i,size,size,caseInit[0],caseInit[1]))
+        for x in range(len(grids[i])):
+            for y in range(len(grids[i][x])):
+                if grids[i][x][y].typeCase=="nextup":
+                    caseInit=[grids[i][x][y].x,grids[i][x][y].y]
+                    done=True
+                    break
+            if done:
+                break
+    return grids
+
+def printNeighbLabysCubicLaby(grids, screen, layer):
+    sizeLaby=len(grids)
+    
+    printLaby(grids[layer], screen, sizeLaby, sizeLaby, POSXCentralLaby, POSYCentralLaby, widthCentralLaby, heightCentralLaby)
+    if layer!=0:
+        printLaby(grids[layer-1], screen, sizeLaby, sizeLaby, POSXLeftLaby, POSYLeftLaby, widthLeftLaby, heightLeftLaby)
+    if layer!=len(grids)-1:
+        printLaby(grids[layer+1], screen, sizeLaby, sizeLaby, POSXRightLaby, POSYRightLaby, widthRightLaby, heightRightLaby)

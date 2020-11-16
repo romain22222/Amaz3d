@@ -9,3 +9,21 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 DARKGRAY = (100,100,100)
 LIGHTGRAY = (200,200,200)
+ORANGE = (255,165,0)
+
+# Positions labyrinthes sur écran
+
+POSXLeftLaby=150
+POSYLeftLaby=200
+widthLeftLaby=0.3
+heightLeftLaby=0.3
+
+POSXCentralLaby=450
+POSYCentralLaby=150
+widthCentralLaby=0.4
+heightCentralLaby=0.4
+
+POSXRightLaby=820
+POSYRightLaby=200
+widthRightLaby=0.3
+heightRightLaby=0.3
