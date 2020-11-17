@@ -11,7 +11,11 @@ DARKGRAY = (100,100,100)
 LIGHTGRAY = (200,200,200)
 ORANGE = (255,165,0)
 
-# Positions labyrinthes sur écran
+# Positions et tailles labyrinthes sur écran
+
+taillesLaby={"veryEasy":3,"easy":4,"medium":9,"hard":16,"challenge":25}
+
+tailleLabyCube=taillesLaby["veryEasy"]
 
 POSXLeftLaby=150
 POSYLeftLaby=200
@@ -27,3 +31,9 @@ POSXRightLaby=820
 POSYRightLaby=200
 widthRightLaby=0.3
 heightRightLaby=0.3
+
+# Position et taille joueur
+
+sizePlayer = 0.25
+posInitPlayerX = 600
+posInitPlayerY = 500

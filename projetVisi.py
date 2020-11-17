@@ -9,17 +9,15 @@ from labyrinthe import *
 
 pygame.init()
 
-black = 0, 0, 0
-
 screen = pygame.display.set_mode(size)
 
 perso = pygame.image.load("perso.gif")
-perso = pygame.transform.rotozoom(perso, 0, 0.25)
+perso = pygame.transform.rotozoom(perso, 0, sizePlayer)
 ''' on divise la taille du personnage par 4 et on le tourne de 0 degre'''
 persovar = perso.get_rect()         
-persovar = persovar.move([600,500])
+persovar = persovar.move([posInitPlayerX,posInitPlayerY])
 pygame.key.set_repeat(60, 60)
-tailleLabyCube=20
+
 grids=createCubicLaby(tailleLabyCube)
 
 while 1:
@@ -32,8 +30,11 @@ while 1:
         persovar=movejoueur(persovar)
         
 
-    screen.fill(black)
-    printNeighbLabysCubicLaby(grids,screen,18)
+    screen.fill(BLACK)
+    
+    layerToPrint=1 #vise à changer dans le futur afin de progresser dans le laby
+    printNeighbLabysCubicLaby(grids,screen,layerToPrint)
+
     screen.blit(perso, persovar)
 
     time.sleep(0.01)
