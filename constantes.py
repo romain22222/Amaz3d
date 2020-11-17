@@ -15,7 +15,7 @@ ORANGE = (255,165,0)
 
 taillesLaby={"veryEasy":3,"easy":4,"medium":9,"hard":16,"challenge":25}
 
-tailleLabyCube=taillesLaby["veryEasy"]
+tailleLabyCube=taillesLaby["medium"]
 
 POSXLeftLaby=150
 POSYLeftLaby=200

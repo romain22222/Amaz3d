@@ -37,6 +37,4 @@ while 1:
 
     screen.blit(perso, persovar)
 
-    time.sleep(0.01)
-
     pygame.display.flip()

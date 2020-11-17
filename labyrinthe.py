@@ -147,11 +147,12 @@ def createCubicLaby(size):
     caseInit=[random.randint(0,size-1),random.randint(0,size-1)]
     for i in range(size):
         done=False
-        grids.append(createLaby(i,size,size,caseInit[0],caseInit[1]))
-        for x in range(len(grids[i])):
-            for y in range(len(grids[i][x])):
-                if grids[i][x][y].typeCase=="nextup":
-                    caseInit=[grids[i][x][y].x,grids[i][x][y].y]
+        grids.append([createLaby(i,size,size,caseInit[0],caseInit[1]),caseInit])
+        for x in range(len(grids[i][0])):
+            for y in range(len(grids[i][0][x])):
+                if grids[i][0][x][y].typeCase=="nextup" or grids[i][0][x][y].typeCase=="final":
+                    grids[i][1]=[grids[i][0][caseInit[0]][caseInit[1]],grids[i][0][x][y]]
+                    caseInit=[x,y]
                     done=True
                     break
             if done:
@@ -161,8 +162,8 @@ def createCubicLaby(size):
 def printNeighbLabysCubicLaby(grids, screen, layer):
     sizeLaby=len(grids)
     
-    printLaby(grids[layer], screen, sizeLaby, sizeLaby, POSXCentralLaby, POSYCentralLaby, widthCentralLaby, heightCentralLaby)
+    printLaby(grids[layer][0], screen, sizeLaby, sizeLaby, POSXCentralLaby, POSYCentralLaby, widthCentralLaby, heightCentralLaby)
     if layer!=0:
-        printLaby(grids[layer-1], screen, sizeLaby, sizeLaby, POSXLeftLaby, POSYLeftLaby, widthLeftLaby, heightLeftLaby)
+        printLaby(grids[layer-1][0], screen, sizeLaby, sizeLaby, POSXLeftLaby, POSYLeftLaby, widthLeftLaby, heightLeftLaby)
     if layer!=len(grids)-1:
-        printLaby(grids[layer+1], screen, sizeLaby, sizeLaby, POSXRightLaby, POSYRightLaby, widthRightLaby, heightRightLaby)
+        printLaby(grids[layer+1][0], screen, sizeLaby, sizeLaby, POSXRightLaby, POSYRightLaby, widthRightLaby, heightRightLaby)
