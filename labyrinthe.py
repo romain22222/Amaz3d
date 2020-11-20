@@ -141,7 +141,8 @@ def addEntreeSortie(grid, layer):
         initCase.typeCase="nextdown"
     else:
         initCase.typeCase="start"
-        
+        firstcase=grid[i][j]
+
 def createCubicLaby(size):
     grids=[]
     caseInit=[random.randint(0,size-1),random.randint(0,size-1)]
