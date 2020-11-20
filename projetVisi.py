@@ -11,12 +11,10 @@ pygame.init()
 
 screen = pygame.display.set_mode(size)
 
-perso = pygame.image.load("perso.gif")
-perso = pygame.transform.rotozoom(perso, 0, sizePlayer)
-''' on divise la taille du personnage par 4 et on le tourne de 0 degre'''
-persovar = perso.get_rect()         
-persovar = persovar.move([posInitPlayerX,posInitPlayerY])
-pygame.key.set_repeat(60, 60)
+#nouvelle instance de joueur
+joueur = joueur()
+       
+#pygame.key.set_repeat(60, 60)
 
 grids=createCubicLaby(tailleLabyCube)
 
@@ -27,14 +25,21 @@ while 1:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-        persovar=movejoueur(persovar)
-        
 
-    screen.fill(BLACK)
-    
+# si une touche a ete pressee
+        elif event.type == pygame.KEYDOWN:
+            joueur.movejoueur(joueur)
+           
+
+    # on met l'arriere plan en noir, peut-etre par la suite une image en fonction des salles ?
+        screen.fill(BLACK)
+
+    # on met le joueur à sa position
+        screen.blit(joueur.image, (joueur.rect))
+
     layerToPrint=1 #vise à changer dans le futur afin de progresser dans le laby
     printNeighbLabysCubicLaby(grids,screen,layerToPrint)
 
-    screen.blit(perso, persovar)
+    
 
     pygame.display.flip()
