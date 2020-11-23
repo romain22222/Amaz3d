@@ -1,4 +1,4 @@
-import sys, time, pygame
+import time, pygame
 from joueur import *
 from constantes import *
 from labyrinthe import *
