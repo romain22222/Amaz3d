@@ -235,14 +235,10 @@ def generateDoorNKey(grid,ends):
             key=random.randint(0,len(ends)-1)
         if grid[door[0]][door[1]].distsTo["end"]==grid[ends[key].x][ends[key].y].distsTo["end"]:
             grid[door[0]][door[1]].locked=True
-            print(door[0],door[1])
             grid[ends[key].x][ends[key].y].objects.append("key")
-            print(ends[key].x,ends[key].y)
             done=True
         elif grid[door[0]][door[1]].distsTo["start"]>grid[ends[key].x][ends[key].y].distsTo["start"]:
             grid[door[0]][door[1]].locked=True
-            print(door[0],door[1])
             grid[ends[key].x][ends[key].y].objects.append("key")
-            print(ends[key].x,ends[key].y)
             done=True
 
