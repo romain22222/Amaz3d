@@ -1,5 +1,6 @@
 import pygame
 import random
+from math import *
 
 from constantes import *
 class Spot:
@@ -11,6 +12,9 @@ class Spot:
         self.visited = False
         self.walls = [True, True, True, True]
         self.typeCase = "end"
+        self.distsTo = {"start":0,"end":0}
+        self.locked=False
+        self.objects=[]
         
     def show(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color=BLACK):
         if self.hidden:
@@ -35,14 +39,14 @@ class Spot:
             pygame.draw.rect(screen, color, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
 
     def add_neighbors(self, rows, cols, grid):
-        if self.x > 0:
-            self.neighbors.append(grid[self.x - 1][self.y])
         if self.y > 0:
             self.neighbors.append(grid[self.x][self.y - 1])
         if self.x < rows - 1:
             self.neighbors.append(grid[self.x + 1][self.y])
         if self.y < cols - 1:
             self.neighbors.append(grid[self.x][self.y + 1])
+        if self.x > 0:
+            self.neighbors.append(grid[self.x - 1][self.y])
 def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0):
     #gridInitPosCol = int(random.random()*cols)
     #gridInitPosRow = int(random.random()*rows)
@@ -57,7 +61,6 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
     current = grid[gridInitPosCol][gridInitPosRow]
     visited = [current]
     completed = False
-
 
     def breakwalls(a, b):
         if a.y == b.y and a.x > b.x:
@@ -75,7 +78,7 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
     while not completed:
         grid[current.x][current.y].visited = True
         got_new = False
-        temp = 10
+        temp = 22
 
         while not got_new and not completed:
             r = random.randint(0, len(current.neighbors)-1)
@@ -99,8 +102,20 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
             breakwalls(current, visited[len(visited)-1])
         current.visited = True
     grid[gridInitPosCol][gridInitPosRow].typeCase="init"
-    addEntreeSortie(grid, layer)
-    return grid
+    ends=addEntreeSortie(grid, layer)
+    for x in range(len(grid)):
+        for y in range(len(grid[x])):
+            if grid[x][y].typeCase=="nextup" or grid[x][y].typeCase=="final":
+                caseEnd=grid[x][y]
+                caseInit=grid[gridInitPosCol][gridInitPosRow]
+                done=True
+                break
+        if done:
+            break
+    neighbChecking(grid)
+    addDistsTo(grid,caseInit,caseEnd)
+    generateDoorNKey(grid,ends)
+    return [grid,[caseInit,caseEnd],ends]
 
 def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
     wr = widthPcnt*width/cols
@@ -120,7 +135,55 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, RED)
             else:
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLACK)
-            
+            if grid[i][j].locked:
+                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (152,54,87))
+            if "key" in grid[i][j].objects:
+                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
+
+def neighbChecking(grid):
+    for x in range(len(grid)):
+        for y in range(len(grid[x])):
+            newNeighb=[]
+            for neighb in range(len(grid[x][y].walls)):
+                if not grid[x][y].walls[neighb]:
+                    if neighb==0:
+                        newNeighb.append(grid[x][y-1])
+                    elif neighb==1:
+                        newNeighb.append(grid[x+1][y])
+                    elif neighb==2:
+                        newNeighb.append(grid[x][y+1])
+                    else:
+                        newNeighb.append(grid[x-1][y])
+            grid[x][y].neighbors=newNeighb
+
+def addDistsTo(grid,caseInit,caseEnd):
+    addDistancesTo(grid, "start", caseInit)
+    addDistancesTo(grid, "end", caseEnd)
+
+def addDistancesTo(grid, typeDistance, caseDebut):
+    grid[caseDebut.x][caseDebut.y].distsTo[typeDistance]=-1
+    valDist=1
+    neighbToCheck=grid[caseDebut.x][caseDebut.y].neighbors
+    neighbToCheckNext=[]
+    while len(neighbToCheck) != 0:
+        for neighb in neighbToCheck:
+            if neighb.distsTo[typeDistance]==0:
+                neighb.distsTo[typeDistance]=valDist
+                neighbToCheckNext=neighbToCheckNext+neighb.neighbors
+        neighbToCheck=neighbToCheckNext
+        neighbToCheckNext=[]
+        valDist+=1
+    grid[caseDebut.x][caseDebut.y].distsTo["start"]=0
+    
+def printLabyGrayScale(grid, screen, distToPrint="start", rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
+    wr = widthPcnt*width/cols
+    hr = heightPcnt*height/rows
+    for i in range(rows):
+        for j in range(cols):
+            grid[i][j].show(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLUE)
+            valGray=int(255/sqrt(2*grid[i][j].distsTo[distToPrint]+1))
+            grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (valGray,valGray,valGray))
+
 
 
 def addEntreeSortie(grid, layer):
@@ -134,30 +197,24 @@ def addEntreeSortie(grid, layer):
     if layer<len(grid)-1:
         chosenCase=random.randint(0,len(ends)-1)
         ends[chosenCase].typeCase="nextup"
+        ends.pop(chosenCase)
     else:
         chosenCase=random.randint(0,len(ends)-1)
         ends[chosenCase].typeCase="final"
+        ends.pop(chosenCase)
     if layer!=0:
         initCase.typeCase="nextdown"
     else:
         initCase.typeCase="start"
-        firstcase=grid[i][j]
-
+    return ends
+        
 def createCubicLaby(size):
     grids=[]
-    caseInit=[random.randint(0,size-1),random.randint(0,size-1)]
+    caseInit=Spot(random.randint(0,size-1),random.randint(0,size-1))
     for i in range(size):
         done=False
-        grids.append([createLaby(i,size,size,caseInit[0],caseInit[1]),caseInit])
-        for x in range(len(grids[i][0])):
-            for y in range(len(grids[i][0][x])):
-                if grids[i][0][x][y].typeCase=="nextup" or grids[i][0][x][y].typeCase=="final":
-                    grids[i][1]=[grids[i][0][caseInit[0]][caseInit[1]],grids[i][0][x][y]]
-                    caseInit=[x,y]
-                    done=True
-                    break
-            if done:
-                break
+        grids.append(createLaby(i,size,size,caseInit.x,caseInit.y))
+        caseInit=grids[i][1][1]
     return grids
 
 def printNeighbLabysCubicLaby(grids, screen, layer):
@@ -168,3 +225,24 @@ def printNeighbLabysCubicLaby(grids, screen, layer):
         printLaby(grids[layer-1][0], screen, sizeLaby, sizeLaby, POSXLeftLaby, POSYLeftLaby, widthLeftLaby, heightLeftLaby)
     if layer!=len(grids)-1:
         printLaby(grids[layer+1][0], screen, sizeLaby, sizeLaby, POSXRightLaby, POSYRightLaby, widthRightLaby, heightRightLaby)
+
+def generateDoorNKey(grid,ends):
+    done=False
+    while not done:
+        door=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+        key=random.randint(0,len(ends)-1)
+        while grid[door[0]][door[1]]==grid[ends[key].x][ends[key].y]:
+            key=random.randint(0,len(ends)-1)
+        if grid[door[0]][door[1]].distsTo["end"]==grid[ends[key].x][ends[key].y].distsTo["end"]:
+            grid[door[0]][door[1]].locked=True
+            print(door[0],door[1])
+            grid[ends[key].x][ends[key].y].objects.append("key")
+            print(ends[key].x,ends[key].y)
+            done=True
+        elif grid[door[0]][door[1]].distsTo["start"]>grid[ends[key].x][ends[key].y].distsTo["start"]:
+            grid[door[0]][door[1]].locked=True
+            print(door[0],door[1])
+            grid[ends[key].x][ends[key].y].objects.append("key")
+            print(ends[key].x,ends[key].y)
+            done=True
+

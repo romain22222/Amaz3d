@@ -37,4 +37,3 @@ heightRightLaby=0.3
 sizePlayer = 0.25
 posInitPlayerX = 600
 posInitPlayerY = 500
-
