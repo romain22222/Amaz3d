@@ -17,7 +17,7 @@ perso = pygame.transform.rotozoom(perso, 0, sizePlayer)
 persovar = perso.get_rect()         
 persovar = persovar.move([posInitPlayerX,posInitPlayerY])
 pygame.key.set_repeat(60, 60)
-
+# grid=createLaby(0,tailleLabyCube,tailleLabyCube,3,3)
 grids=createCubicLaby(tailleLabyCube)
 
 while 1:
@@ -34,7 +34,9 @@ while 1:
     
     layerToPrint=1 #vise à changer dans le futur afin de progresser dans le laby
     printNeighbLabysCubicLaby(grids,screen,layerToPrint)
-
+    # printLabyGrayScale(grid[0],screen,"start",9,9,500)
+    # printLabyGrayScale(grid[0],screen,"end",9,9,500,400)
+    # printLaby(grid[0],screen,9,9)
     screen.blit(perso, persovar)
 
     pygame.display.flip()
