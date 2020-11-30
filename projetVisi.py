@@ -16,23 +16,23 @@ pygame.key.set_repeat(60, 60)
 # grid=createLaby(0,tailleLabyCube,tailleLabyCube,3,3)
 grids=createCubicLaby(tailleLabyCube)
 
-perso = Joueur(grids[1][1][0])
+perso = Joueur(grids[0][1][0])
 #persovar = perso.get_rect()
 #persovar = persovar.move([posInitPlayerX,posInitPlayerY])
 #perso = pygame.transform.rotozoom(perso, 0, sizePlayer)
+
+layerToPrint=0
 
 
 
 while 1:
     
-    layerToPrint=1 #vise à changer dans le futur afin de progresser dans le laby
-
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-        perso.movejoueur(grids,layerToPrint)
+        layerToPrint=perso.movejoueur(grids,layerToPrint)
 
     screen.fill(BLACK)
     
