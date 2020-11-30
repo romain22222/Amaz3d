@@ -31,9 +31,3 @@ POSXRightLaby=820
 POSYRightLaby=200
 widthRightLaby=0.3
 heightRightLaby=0.3
-
-# Position et taille joueur
-
-sizePlayer = 0.25
-posInitPlayerX = 600
-posInitPlayerY = 500
