@@ -33,13 +33,17 @@ layerToPrint=0
 
 
 while perso.onCase.typeCase!="final":
-    
+    lEv=[]
     for event in pygame.event.get():
-
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-        layerToPrint, chrono=perso.movejoueur(grids,layerToPrint,chrono)
+        if event not in lEv:
+            layerToPrint2, chrono=perso.movejoueur(grids,layerToPrint,chrono)
+            if layerToPrint != layerToPrint2:
+                layerToPrint=layerToPrint2
+                break;
+            lEv.append(event)
     screen.fill(BLACK)
     
     printNeighbLabysCubicLaby(grids,screen,layerToPrint)
