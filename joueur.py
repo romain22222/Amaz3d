@@ -1,6 +1,7 @@
 import sys, time, pygame
 from constantes import *
 from labyrinthe import *
+from timer import *
 
 
 class Joueur:
@@ -14,7 +15,7 @@ class Joueur:
         self.cadre = self.cadre.move([self.onCase.x*hr+3+POSXCentralLaby, self.onCase.y*wr+3+POSYCentralLaby])
         
     
-    def movejoueur(self,grids,layer):
+    def movejoueur(self,grids,layer,timer):
         keys = pygame.key.get_pressed()
         x=self.onCase.x
         y=self.onCase.y
@@ -42,10 +43,14 @@ class Joueur:
 
         if self.onCase.typeCase=="nextup":
             layer+=1
-        if "key" in self.onCase.objects:
-            self.inventaire.append("key")
-            self.onCase.objects.remove("key")
-        return layer
+        for obj in self.onCase.objects[:]:
+            if "key"==obj:
+                self.inventaire.append("key")
+                self.onCase.objects.remove("key")
+            elif "timer"==obj[:5]:
+                timer.timeReduce(int(obj[-2:])*1000)
+                self.onCase.objects.remove(obj)
+        return layer, timer
 
     def printPerso(self, screen):
         screen.blit(self.sprite,self.cadre)
