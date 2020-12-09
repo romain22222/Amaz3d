@@ -138,13 +138,19 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
             else:
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLACK)
             if grid[i][j].locked:
-                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (152,54,87))
+                printCaseWithSprite(screen,"minion.png",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
+                # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (152,54,87))
             for obj in grid[i][j].objects:
                 if "key"==obj:
                     grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
                 elif "timer"==obj[:5]:
                     grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,170,12))
 
+def printCaseWithSprite(screen,img,x,y,leftTopCornerX,leftTopCornerY,wr,hr):
+    sprite=pygame.transform.scale(pygame.image.load(img),(int(hr)-4,int(wr)-4))
+    cadre = sprite.get_rect()
+    cadre = cadre.move([x*hr+3+leftTopCornerX, y*wr+3+leftTopCornerY])
+    screen.blit(sprite,cadre)
 
 def neighbChecking(grid):
     for x in range(len(grid)):
@@ -243,6 +249,8 @@ def generateDoorNKey(grid,ends):
             grid[door[0]][door[1]].locked=True
             grid[ends[key].x][ends[key].y].objects.append("key")
             done=True
+        
+
             
 def generateTimerReduce(grid):
     done=False
