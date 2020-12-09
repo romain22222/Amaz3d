@@ -115,6 +115,8 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
     neighbChecking(grid)
     addDistsTo(grid,caseInit,caseEnd)
     generateDoorNKey(grid,ends)
+    if random.randint(0,1):
+        generateTimerReduce(grid)
     return [grid,[caseInit,caseEnd],ends]
 
 def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
@@ -137,8 +139,12 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLACK)
             if grid[i][j].locked:
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (152,54,87))
-            if "key" in grid[i][j].objects:
-                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
+            for obj in grid[i][j].objects:
+                if "key"==obj:
+                    grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
+                elif "timer"==obj[:5]:
+                    grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,170,12))
+
 
 def neighbChecking(grid):
     for x in range(len(grid)):
@@ -237,8 +243,10 @@ def generateDoorNKey(grid,ends):
             grid[door[0]][door[1]].locked=True
             grid[ends[key].x][ends[key].y].objects.append("key")
             done=True
-        #elif grid[door[0]][door[1]].distsTo["end"]>grid[ends[key].x][ends[key].y].distsTo["end"]:
-         #   grid[door[0]][door[1]].locked=True
-          #  grid[ends[key].x][ends[key].y].objects.append("key")
-           # done=True
             
+def generateTimerReduce(grid):
+    done=False
+    timer=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+    while grid[timer[0]][timer[1]].typeCase!="path" or grid[timer[0]][timer[1]].locked:
+        timer=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+    grid[timer[0]][timer[1]].objects.append("timer{:0>2}".format(random.randint(1,15)))

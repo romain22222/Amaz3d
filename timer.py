@@ -20,3 +20,10 @@ class Timer():
         seconde=int(time%60)
         ms=int((time*1000)%1000)
         return "{:0>2}' {:0>2}\" {:0>3}".format(minute,seconde,ms)
+
+    def timeReduce(self, t):
+        if self.TpsZero+t<pygame.time.get_ticks():
+            self.TpsZero+=t
+        else:
+            self.TpsZero=pygame.time.get_ticks()
+

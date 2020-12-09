@@ -39,7 +39,7 @@ while perso.onCase.typeCase!="final":
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-        layerToPrint=perso.movejoueur(grids,layerToPrint)
+        layerToPrint, chrono=perso.movejoueur(grids,layerToPrint,chrono)
 
     screen.fill(BLACK)
     
