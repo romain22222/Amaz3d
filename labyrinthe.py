@@ -114,10 +114,11 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
             break
     neighbChecking(grid)
     addDistsTo(grid,caseInit,caseEnd)
-    generateDoorNKey(grid,ends)
+    for i in range(random.randint(0,2)):
+        generateDoorNKey(grid,ends)
     for i in range(random.randint(0,1)):
         generateTimerReduce(grid)
-    for i in range(random.randint(1,1)):
+    for i in range(random.randint(0,1)):
         generateWallBreaker(grid)
     return [grid,[caseInit,caseEnd],ends]
 
@@ -144,12 +145,14 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
                 # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (152,54,87))
             for obj in grid[i][j].objects:
                 if "key"==obj:
-                    printCaseWithSprite(screen,"cle.gif",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
+                    printCaseWithSprite(screen,"cle.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
                     # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
                 if "timer"==obj[:5]:
-                    grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,170,12))
+                    printCaseWithSprite(screen,"sablier vert.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
+                    # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,170,12))
                 if "wb"==obj:
-                    grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,1,180))
+                    printCaseWithSprite(screen,"wall breaker.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
+                    # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,1,180))
 
 def printCaseWithSprite(screen,img,x,y,leftTopCornerX,leftTopCornerY,wr,hr):
     sprite=pygame.transform.scale(pygame.image.load(img),(int(hr)-4,int(wr)-4))
