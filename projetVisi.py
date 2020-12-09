@@ -40,7 +40,6 @@ while perso.onCase.typeCase!="final":
             pygame.quit()
             quit()
         layerToPrint, chrono=perso.movejoueur(grids,layerToPrint,chrono)
-
     screen.fill(BLACK)
     
     printNeighbLabysCubicLaby(grids,screen,layerToPrint)

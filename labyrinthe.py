@@ -115,8 +115,10 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
     neighbChecking(grid)
     addDistsTo(grid,caseInit,caseEnd)
     generateDoorNKey(grid,ends)
-    if random.randint(0,1):
+    for i in range(random.randint(0,1)):
         generateTimerReduce(grid)
+    for i in range(random.randint(1,1)):
+        generateWallBreaker(grid)
     return [grid,[caseInit,caseEnd],ends]
 
 def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
@@ -138,13 +140,16 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
             else:
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLACK)
             if grid[i][j].locked:
-                printCaseWithSprite(screen,"minion.png",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
+                printCaseWithSprite(screen,"porte.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
                 # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (152,54,87))
             for obj in grid[i][j].objects:
                 if "key"==obj:
-                    grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
-                elif "timer"==obj[:5]:
+                    printCaseWithSprite(screen,"cle.gif",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
+                    # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
+                if "timer"==obj[:5]:
                     grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,170,12))
+                if "wb"==obj:
+                    grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,1,180))
 
 def printCaseWithSprite(screen,img,x,y,leftTopCornerX,leftTopCornerY,wr,hr):
     sprite=pygame.transform.scale(pygame.image.load(img),(int(hr)-4,int(wr)-4))
@@ -253,8 +258,14 @@ def generateDoorNKey(grid,ends):
 
             
 def generateTimerReduce(grid):
-    done=False
     timer=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
     while grid[timer[0]][timer[1]].typeCase!="path" or grid[timer[0]][timer[1]].locked:
         timer=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
-    grid[timer[0]][timer[1]].objects.append("timer{:0>2}".format(random.randint(1,15)))
+    grid[timer[0]][timer[1]].objects.append("timer{:0>3}".format(random.randint(10,30)))
+
+def generateWallBreaker(grid):
+    wb=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+    while grid[wb[0]][wb[1]].typeCase!="path" or grid[wb[0]][wb[1]].locked:
+        wb=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+    grid[wb[0]][wb[1]].objects.append("wb")
+
