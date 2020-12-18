@@ -119,6 +119,8 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
     for i in range(random.randint(0,1)):
         generateTimerReduce(grid)
     for i in range(random.randint(0,1)):
+        generateTimerDecrease(grid)
+    for i in range(random.randint(0,1)):
         generateWallBreaker(grid)
     return [grid,[caseInit,caseEnd],ends]
 
@@ -147,10 +149,13 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
                 if "key"==obj:
                     printCaseWithSprite(screen,"cle.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
                     # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
-                if "timer"==obj[:5]:
+                elif "timer2"==obj[:6]:
+                    printCaseWithSprite(screen,"sablier rouge.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
+                    # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (12,170,180))
+                elif "timer"==obj[:5]:
                     printCaseWithSprite(screen,"sablier vert.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
                     # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,170,12))
-                if "wb"==obj:
+                elif "wb"==obj:
                     printCaseWithSprite(screen,"wall breaker.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
                     # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,1,180))
 
@@ -265,6 +270,12 @@ def generateTimerReduce(grid):
     while grid[timer[0]][timer[1]].typeCase!="path" or grid[timer[0]][timer[1]].locked:
         timer=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
     grid[timer[0]][timer[1]].objects.append("timer{:0>3}".format(random.randint(10,30)))
+
+def generateTimerDecrease(grid):
+    timer2=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+    while grid[timer2[0]][timer2[1]].typeCase!="path" or grid[timer2[0]][timer2[1]].locked:
+        timer2=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+    grid[timer2[0]][timer2[1]].objects.append("timer2-{:0>2}".format(random.randint(2,5)))
 
 def generateWallBreaker(grid):
     wb=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]

@@ -67,10 +67,13 @@ class Joueur:
             if "key"==obj:
                 self.inventaire.append("key")
                 self.onCase.objects.remove("key")
-            if "wb"==obj:
+            elif "wb"==obj:
                 self.inventaire.append("wb")
                 self.onCase.objects.remove("wb")
-            if "timer"==obj[:5]:
+            elif "timer2"==obj[:6]:
+                timer.timeReduce(int(obj[-3:])*1000)
+                self.onCase.objects.remove(obj)
+            elif "timer"==obj[:5]:
                 timer.timeReduce(int(obj[-3:])*1000)
                 self.onCase.objects.remove(obj)
         return layer, timer
