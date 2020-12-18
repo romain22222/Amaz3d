@@ -42,7 +42,7 @@ while perso.onCase.typeCase!="final":
             layerToPrint2, chrono=perso.movejoueur(grids,layerToPrint,chrono)
             if layerToPrint != layerToPrint2:
                 layerToPrint=layerToPrint2
-                break;
+                pygame.event.clear()
             lEv.append(event)
     screen.fill(BLACK)
     
