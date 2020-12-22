@@ -7,7 +7,10 @@ class Timer():
         self.TpsZero = pygame.time.get_ticks() ## Départ
 
     def temps(self):
-        seconds = (pygame.time.get_ticks() - self.TpsZero) / 1000
+        if MODESELECTED==1:
+            seconds = (pygame.time.get_ticks() - self.TpsZero) / 1000
+        elif MODESELECTED==2:
+            seconds = (self.TpsZero - pygame.time.get_ticks() + TEMPSINIT) / 1000
         return seconds
 
     def print_timer(self,screen,myfont):

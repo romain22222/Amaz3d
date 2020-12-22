@@ -64,18 +64,11 @@ class Joueur:
         if self.onCase.typeCase=="nextup":
             layer+=1
         for obj in self.onCase.objects[:]:
-            if "key"==obj:
-                self.inventaire.append("key")
-                self.onCase.objects.remove("key")
-            elif "wb"==obj:
-                self.inventaire.append("wb")
-                self.onCase.objects.remove("wb")
-            elif "timer2"==obj[:6]:
+            if "timer"==obj[:5]:
                 timer.timeReduce(int(obj[-3:])*1000)
-                self.onCase.objects.remove(obj)
-            elif "timer"==obj[:5]:
-                timer.timeReduce(int(obj[-3:])*1000)
-                self.onCase.objects.remove(obj)
+            else:
+                self.inventaire.append(obj)
+            self.onCase.objects.remove(obj)
         return layer, timer
 
     def printPerso(self, screen):

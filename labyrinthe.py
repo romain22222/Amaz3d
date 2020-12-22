@@ -48,8 +48,6 @@ class Spot:
         if self.x > 0:
             self.neighbors.append(grid[self.x - 1][self.y])
 def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0):
-    #gridInitPosCol = int(random.random()*cols)
-    #gridInitPosRow = int(random.random()*rows)
     pygame.init()
     done = False
     grid = [[Spot(i, j) for j in range(cols)] for i in range(rows)]
@@ -130,9 +128,7 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
     for i in range(rows):
         for j in range(cols):
             grid[i][j].show(screen, wr, hr, leftTopCornerX, leftTopCornerY, WHITE)
-            if grid[i][j].typeCase=="end":
-                grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLUE)
-            elif grid[i][j].typeCase=="start":
+            if grid[i][j].typeCase=="start":
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, GREEN)
             elif grid[i][j].typeCase=="nextup":
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, LIGHTGRAY)
@@ -140,6 +136,8 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, DARKGRAY)
             elif grid[i][j].typeCase=="final":
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, RED)
+            # elif grid[i][j].typeCase=="end":
+            #     grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLUE)
             else:
                 grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, BLACK)
             if grid[i][j].locked:
@@ -148,16 +146,12 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
             for obj in grid[i][j].objects:
                 if "key"==obj:
                     printCaseWithSprite(screen,"cle.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
-                    # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (0,54,87))
                 elif "timer2"==obj[:6]:
                     printCaseWithSprite(screen,"sablier rouge.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
-                    # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (12,170,180))
                 elif "timer"==obj[:5]:
                     printCaseWithSprite(screen,"sablier vert.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
-                    # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,170,12))
                 elif "wb"==obj:
                     printCaseWithSprite(screen,"wall breaker.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
-                    # grid[i][j].show_block(screen, wr, hr, leftTopCornerX, leftTopCornerY, (180,1,180))
 
 def printCaseWithSprite(screen,img,x,y,leftTopCornerX,leftTopCornerY,wr,hr):
     sprite=pygame.transform.scale(pygame.image.load(img),(int(hr)-4,int(wr)-4))

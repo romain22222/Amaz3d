@@ -13,9 +13,21 @@ ORANGE = (255,165,0)
 
 # Positions et tailles labyrinthes sur écran
 
-taillesLaby={"veryEasy":3,"easy":4,"medium":9,"hard":16,"challenge":25}
+taillesLaby={"veryEasy":7,"easy":9,"medium":12,"hard":15,"challenge":20}
+difficultyChosen="challenge"
 
-tailleLabyCube=taillesLaby["medium"]
+tailleLabyCube=taillesLaby[difficultyChosen]
+
+MODESELECT={"Contre-la-montre":1,"Temps limité":2}
+MODESELECTED=MODESELECT["Temps limité"]
+
+if MODESELECTED==2:
+	timeTotal={"veryEasy":300,"easy":300,"medium":240,"hard":180,"challenge":120}
+	TEMPSINIT=timeTotal[difficultyChosen]*1000
+
+	BOOSTTIME = {"veryEasy":10,"easy":10,"medium":15,"hard":15,"challenge":15}
+	BOOSTTIMEREDUCE = BOOSTTIME[difficultyChosen]
+
 
 POSXLeftLaby=150
 POSYLeftLaby=200

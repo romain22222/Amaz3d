@@ -14,15 +14,11 @@ pygame.font.init()
 screen = pygame.display.set_mode(size)
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 
-''' on divise la taille du personnage par 4 et on le tourne de 0 degre'''
 pygame.key.set_repeat(60, 60)
-# grid=createLaby(0,tailleLabyCube,tailleLabyCube,3,3)
+
 grids=createCubicLaby(tailleLabyCube)
 
 perso = Joueur(grids[0][1][0])
-#persovar = perso.get_rect()
-#persovar = persovar.move([posInitPlayerX,posInitPlayerY])
-#perso = pygame.transform.rotozoom(perso, 0, sizePlayer)
 
 chrono=Timer()
 chrono.TpsZero=pygame.time.get_ticks()
@@ -41,6 +37,8 @@ while perso.onCase.typeCase!="final":
         if event not in lEv:
             layerToPrint2, chrono=perso.movejoueur(grids,layerToPrint,chrono)
             if layerToPrint != layerToPrint2:
+                if MODESELECTED==2:
+                    chrono.timeReduce(BOOSTTIMEREDUCE*1000)
                 layerToPrint=layerToPrint2
                 pygame.event.clear()
             lEv.append(event)
@@ -48,16 +46,14 @@ while perso.onCase.typeCase!="final":
     
     printNeighbLabysCubicLaby(grids,screen,layerToPrint)
     perso.printPerso(screen)
-    # printLabyGrayScale(grid[0],screen,"start",9,9,500)
-    # printLabyGrayScale(grid[0],screen,"end",9,9,500,400)
-    # printLaby(grid[0],screen,9,9)
-    # screen.blit(perso, persovar)
 
     chrono.print_timer(screen,myfont)
      
     pygame.display.flip()
     chrono.fpsClock.tick(60)
     pygame.event.get()
+    if MODESELECTED==2 and chrono.temps() <= 0:
+        break;
     time.sleep(0.05)
 
 print(chrono.convert_time())
