@@ -53,17 +53,11 @@ def menu():
 def partie():
     difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     grids=createCubicLaby(tailleLabyCube)
-
     perso = Joueur(grids[0][1][0])
-
     chrono=Timer()
     chrono.TpsZero=pygame.time.get_ticks()
     chrono.fpsClock = pygame.time.Clock()
-
     layerToPrint=0
-
-
-
     while perso.onCase.typeCase!="final":
         lEv=[]
         for event in pygame.event.get():

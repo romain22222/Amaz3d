@@ -8,7 +8,9 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 DARKGRAY = (100,100,100)
+DDGRAY = (50,50,50)
 LIGHTGRAY = (200,200,200)
+LLGRAY=(225,225,225)
 ORANGE = (255,165,0)
 
 # Positions et tailles labyrinthes sur écran

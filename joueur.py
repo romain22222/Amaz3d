@@ -73,12 +73,13 @@ class Joueur:
                 self.onCase.neighbors.append(grids[layer][0][x][y+1])
             self.inventaire.remove("wb")
             self.cooldowns["wb"]=pygame.time.get_ticks()
-
         if self.onCase.typeCase=="nextup":
             layer+=1
         for obj in self.onCase.objects[:]:
             if "timer"==obj[:5]:
                 timer.timeReduce(int(obj[-3:])*1000)
+            if obj=="fAri":
+                useFAri(self.onCase)
             else:
                 self.inventaire.append(obj)
             self.onCase.objects.remove(obj)
