@@ -21,6 +21,7 @@ class Spot:
         self.x = x
         self.y = y
         self.hidden = False
+        self.arianed = False
         self.neighbors = []
         self.visited = False
         self.walls = [True, True, True, True]
@@ -31,11 +32,13 @@ class Spot:
         
     def show(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color=BLACK):
         if self.hidden:
-            pygame.draw.line(screen, ORANGE, [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY],       [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
-            pygame.draw.line(screen, ORANGE, [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY],    [self.x*hr+hr+leftTopCornerX, self.y*wr + wr+leftTopCornerY], 2)
-            pygame.draw.line(screen, ORANGE, [self.x*hr+hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], 2)
-            pygame.draw.line(screen, ORANGE, [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY],    [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
+            pygame.draw.line(screen, BLACK, [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY],       [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
+            pygame.draw.line(screen, BLACK, [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY],    [self.x*hr+hr+leftTopCornerX, self.y*wr + wr+leftTopCornerY], 2)
+            pygame.draw.line(screen, BLACK, [self.x*hr+hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY], 2)
+            pygame.draw.line(screen, BLACK, [self.x*hr+leftTopCornerX, self.y*wr+wr+leftTopCornerY],    [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
         else:
+            if self.arianed:
+                color=LLGRAY
             if self.walls[0]:
                 pygame.draw.line(screen, color, [self.x*hr+leftTopCornerX, self.y*wr+leftTopCornerY],       [self.x*hr+hr+leftTopCornerX, self.y*wr+leftTopCornerY], 2)
             if self.walls[1]:
@@ -47,7 +50,9 @@ class Spot:
 
     def show_block(self, screen, wr, hr, leftTopCornerX, leftTopCornerY, color):
         if self.hidden:
-            pygame.draw.rect(screen, ORANGE, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
+            pygame.draw.rect(screen, BLACK, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
+        elif self.arianed:
+            pygame.draw.rect(screen, DDGRAY, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
         else:
             pygame.draw.rect(screen, color, [self.x*hr+2+leftTopCornerX, self.y*wr+2+leftTopCornerY, hr-2, wr-2])
 
@@ -133,7 +138,11 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
     for i in range(random.randint(0,1)):
         generateTimerDecrease(grid)
     for i in range(random.randint(0,1)):
-        generateWallBreaker(grid)
+        if random.randint(0,1):
+            generateWallBreaker(grid)
+        else:
+            generateFilAriane(grid)
+
     return [grid,[caseInit,caseEnd],ends]
 
 def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
@@ -167,6 +176,8 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
                     printCaseWithSprite(screen,"sablier vert.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
                 elif "wb"==obj:
                     printCaseWithSprite(screen,"wall breaker.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
+                elif "fAri"==obj:
+                    printCaseWithSprite(screen,"fil d'ariane.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
 
 def printCaseWithSprite(screen,img,x,y,leftTopCornerX,leftTopCornerY,wr,hr):
     difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
@@ -280,9 +291,7 @@ def generateDoorNKey(grid,ends):
             grid[door[0]][door[1]].locked=True
             grid[ends[key].x][ends[key].y].objects.append("key")
             done=True
-        
 
-            
 def generateTimerReduce(grid):
     difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     timer=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
@@ -304,3 +313,18 @@ def generateWallBreaker(grid):
         wb=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
     grid[wb[0]][wb[1]].objects.append("wb")
 
+def generateFilAriane(grid):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
+    fAri=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+    while grid[fAri[0]][fAri[1]].typeCase!="path" or grid[fAri[0]][fAri[1]].locked:
+        fAri=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
+    grid[fAri[0]][fAri[1]].objects.append("fAri")
+
+
+def useFAri(case):
+    while case.distsTo['end']>1:
+        for cell in case.neighbors:
+            if case.distsTo['end']>cell.distsTo['end']:
+                case=cell
+                cell.arianed=True
+                break

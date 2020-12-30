@@ -28,7 +28,7 @@ class Timer():
 
     def print_timer(self,screen,myfont):
         textsurface = myfont.render(self.convert_time(), False, RED)
-        screen.blit(textsurface,(0.48*width,0.05*height))
+        screen.blit(textsurface,(0.45*width,0.08*height))
         
     def convert_time(self):
         time=self.temps()
