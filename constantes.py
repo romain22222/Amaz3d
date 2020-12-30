@@ -1,3 +1,5 @@
+import pygame_menu
+
 # la taille de la fenetre
 size = width, height = 1200, 800
 
@@ -34,3 +36,17 @@ POSXRightLaby=820
 POSYRightLaby=200
 widthRightLaby=0.3
 heightRightLaby=0.3
+
+#theme des menus
+themeLaby = pygame_menu.themes.THEME_DARK.copy() #Theme(background_color=(0, 0, 0, 0),title_shadow=True,title_background_color=(4, 47, 126))
+themeLaby.background_color=BLACK
+themeLaby.title_shadow=True
+themeLaby.title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL
+themeLaby.widget_font=pygame_menu.font.FONT_MUNRO
+themeLaby.title_offset=((460,175))
+themeLaby.title_background_color=BLACK
+themeLaby.title_font=pygame_menu.font.FONT_MUNRO
+themeLaby.title_font_size=(96)
+themeLaby.title_font_color=RED
+themeLaby.scrollbar_color=RED
+

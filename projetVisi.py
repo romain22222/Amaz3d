@@ -41,7 +41,8 @@ def start_the_game():
 def menu():
 
     menu = pygame_menu.Menu(800, 1200, 'Amaz3d',
-                           theme=pygame_menu.themes.THEME_BLUE)
+                           theme=themeLaby)
+                   
 
     menu.add_text_input('Joueur :', default='')
     menu.add_selector('Difficulty :', [("veryEasy","veryEasy"),("easy","easy"),("medium","medium"),("hard","hard"),("challenge","challenge")], onchange=set_difficulty)
