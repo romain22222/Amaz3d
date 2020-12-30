@@ -1,9 +1,22 @@
 import pygame
 import random
 from math import *
-
 from constantes import *
+
+def chargeParams():
+    with open('options.txt', 'r') as file:
+        data = file.readlines()
+
+    difficultyChosen = data[0][:-1]
+    MODESELECTED=MODESELECT[data[1][:-1]]
+    tailleLabyCube=taillesLaby[difficultyChosen]
+    TEMPSINIT=timeTotal[difficultyChosen]*1000
+    BOOSTTIMEREDUCE = BOOSTTIME[difficultyChosen]
+
+    return difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube
+
 class Spot:
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -48,6 +61,7 @@ class Spot:
         if self.x > 0:
             self.neighbors.append(grid[self.x - 1][self.y])
 def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     pygame.init()
     done = False
     grid = [[Spot(i, j) for j in range(cols)] for i in range(rows)]
@@ -123,6 +137,7 @@ def createLaby(layer, rows = 6, cols = 6, gridInitPosCol= 0, gridInitPosRow = 0)
     return [grid,[caseInit,caseEnd],ends]
 
 def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     wr = widthPcnt*width/cols
     hr = heightPcnt*height/rows
     for i in range(rows):
@@ -154,12 +169,14 @@ def printLaby(grid, screen, rows = 6, cols = 6, leftTopCornerX = 0, leftTopCorne
                     printCaseWithSprite(screen,"wall breaker.jpg",i,j,leftTopCornerX,leftTopCornerY,wr,hr)
 
 def printCaseWithSprite(screen,img,x,y,leftTopCornerX,leftTopCornerY,wr,hr):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     sprite=pygame.transform.scale(pygame.image.load(img),(int(hr)-4,int(wr)-4))
     cadre = sprite.get_rect()
     cadre = cadre.move([x*hr+3+leftTopCornerX, y*wr+3+leftTopCornerY])
     screen.blit(sprite,cadre)
 
 def neighbChecking(grid):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     for x in range(len(grid)):
         for y in range(len(grid[x])):
             newNeighb=[]
@@ -176,10 +193,12 @@ def neighbChecking(grid):
             grid[x][y].neighbors=newNeighb
 
 def addDistsTo(grid,caseInit,caseEnd):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     addDistancesTo(grid, "start", caseInit)
     addDistancesTo(grid, "end", caseEnd)
 
 def addDistancesTo(grid, typeDistance, caseDebut):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     grid[caseDebut.x][caseDebut.y].distsTo[typeDistance]=-1
     valDist=1
     neighbToCheck=grid[caseDebut.x][caseDebut.y].neighbors
@@ -195,6 +214,7 @@ def addDistancesTo(grid, typeDistance, caseDebut):
     grid[caseDebut.x][caseDebut.y].distsTo["start"]=0
     
 def printLabyGrayScale(grid, screen, distToPrint="start", rows = 6, cols = 6, leftTopCornerX = 0, leftTopCornerY = 0, widthPcnt = 0.3, heightPcnt = 0.4):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     wr = widthPcnt*width/cols
     hr = heightPcnt*height/rows
     for i in range(rows):
@@ -206,6 +226,7 @@ def printLabyGrayScale(grid, screen, distToPrint="start", rows = 6, cols = 6, le
 
 
 def addEntreeSortie(grid, layer):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     ends=[]
     for i in range(len(grid)):
         for j in range(len(grid[i])):
@@ -228,6 +249,7 @@ def addEntreeSortie(grid, layer):
     return ends
         
 def createCubicLaby(size):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     grids=[]
     caseInit=Spot(random.randint(0,size-1),random.randint(0,size-1))
     for i in range(size):
@@ -237,6 +259,7 @@ def createCubicLaby(size):
     return grids
 
 def printNeighbLabysCubicLaby(grids, screen, layer):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     sizeLaby=len(grids)
     
     printLaby(grids[layer][0], screen, sizeLaby, sizeLaby, POSXCentralLaby, POSYCentralLaby, widthCentralLaby, heightCentralLaby)
@@ -246,6 +269,7 @@ def printNeighbLabysCubicLaby(grids, screen, layer):
         printLaby(grids[layer+1][0], screen, sizeLaby, sizeLaby, POSXRightLaby, POSYRightLaby, widthRightLaby, heightRightLaby)
 
 def generateDoorNKey(grid,ends):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     done=False
     while not done:
         door=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
@@ -260,18 +284,21 @@ def generateDoorNKey(grid,ends):
 
             
 def generateTimerReduce(grid):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     timer=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
     while grid[timer[0]][timer[1]].typeCase!="path" or grid[timer[0]][timer[1]].locked:
         timer=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
     grid[timer[0]][timer[1]].objects.append("timer{:0>3}".format(random.randint(10,30)))
 
 def generateTimerDecrease(grid):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     timer2=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
     while grid[timer2[0]][timer2[1]].typeCase!="path" or grid[timer2[0]][timer2[1]].locked:
         timer2=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
     grid[timer2[0]][timer2[1]].objects.append("timer2-{:0>2}".format(random.randint(2,5)))
 
 def generateWallBreaker(grid):
+    difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
     wb=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]
     while grid[wb[0]][wb[1]].typeCase!="path" or grid[wb[0]][wb[1]].locked:
         wb=[random.randint(0,len(grid[0])-1),random.randint(0,len(grid[0])-1)]

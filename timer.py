@@ -1,12 +1,25 @@
 import pygame
 from constantes import *
 
+def chargeParams():
+    with open('options.txt', 'r') as file:
+        data = file.readlines()
+
+    difficultyChosen = data[0][:-1]
+    MODESELECTED=MODESELECT[data[1][:-1]]
+    tailleLabyCube=taillesLaby[difficultyChosen]
+    TEMPSINIT=timeTotal[difficultyChosen]*1000
+    BOOSTTIMEREDUCE = BOOSTTIME[difficultyChosen]
+
+    return difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube
+
 class Timer():
     def __Init__(self):
         self.fpsClock = pygame.time.Clock()
         self.TpsZero = pygame.time.get_ticks() ## Départ
 
     def temps(self):
+        difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
         if MODESELECTED==1:
             seconds = (pygame.time.get_ticks() - self.TpsZero) / 1000
         elif MODESELECTED==2:

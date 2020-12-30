@@ -3,9 +3,21 @@ from constantes import *
 from labyrinthe import *
 from timer import *
 
+def chargeParams():
+    with open('options.txt', 'r') as file:
+        data = file.readlines()
+
+    difficultyChosen = data[0][:-1]
+    MODESELECTED=MODESELECT[data[1][:-1]]
+    tailleLabyCube=taillesLaby[difficultyChosen]
+    TEMPSINIT=timeTotal[difficultyChosen]*1000
+    BOOSTTIMEREDUCE = BOOSTTIME[difficultyChosen]
+
+    return difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube
 
 class Joueur:
     def __init__(self,case):
+        difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
         wr = widthCentralLaby*width/tailleLabyCube
         hr = heightCentralLaby*height/tailleLabyCube
         self.cooldowns={"wb":pygame.time.get_ticks()}
@@ -17,6 +29,7 @@ class Joueur:
         
     
     def movejoueur(self,grids,layer,timer):
+        difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
         keys = pygame.key.get_pressed()
         x=self.onCase.x
         y=self.onCase.y
@@ -72,6 +85,7 @@ class Joueur:
         return layer, timer
 
     def printPerso(self, screen):
+        difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
         screen.blit(self.sprite,self.cadre)
     
 
