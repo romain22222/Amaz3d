@@ -53,7 +53,7 @@ themeLaby.title_offset=(460,175)
 themeLaby.title_background_color=BLACK
 themeLaby.title_font=pygame_menu.font.FONT_MUNRO
 themeLaby.title_font_size=96
-themeLaby.title_font_color=RED
+themeLaby.title_font_color=BLACK
 themeLaby.scrollbar_color=RED
 themeLaby.menubar_close_button=False
 
