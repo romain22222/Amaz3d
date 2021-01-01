@@ -46,7 +46,7 @@ def start_the_game():
     pseudo = data[2][:-1]
     checkHs('LAYER',MODESELECTED,difficultyChosen,lapT,pseudo)
     checkHs('TOTAL',MODESELECTED,difficultyChosen,finalT,pseudo)
-    menu_hs()
+    # menu_hs()
 
 def menu():
     menu = pygame_menu.Menu(800, 1200, 'Amaz3d',
@@ -58,15 +58,15 @@ def menu():
     menu.add_button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(screen)
 
-def menu_hs():
-    menu = pygame_menu.Menu(800, 1200, 'Highscores',
-                           theme=themeLaby)
-    menu.add_selector('Difficulty : ', [("veryEasy","veryEasy"),("easy","easy"),("medium","medium"),("hard","hard"),("challenge","challenge")], onchange=set_difficulty)
-    menu.add_selector('Mode : ', [("Contre-la-montre","Contre-la-montre"),("Temps limite","Temps limite")], onchange=set_mode)
-    menu.add_selector('Type : ', [("TOTAL","TOTAL"),("LAYER","LAYER")], onchange=set_type)
-    menu.add_button('Play', start_the_game)
-    menu.add_button('Quit', pygame_menu.events.EXIT)
-    menu.mainloop(screen)
+# def menu_hs():
+#     menu = pygame_menu.Menu(800, 1200, 'Highscores',
+#                            theme=themeLaby)
+#     menu.add_selector('Difficulty : ', [("veryEasy","veryEasy"),("easy","easy"),("medium","medium"),("hard","hard"),("challenge","challenge")], onchange=set_difficulty)
+#     menu.add_selector('Mode : ', [("Contre-la-montre","Contre-la-montre"),("Temps limite","Temps limite")], onchange=set_mode)
+#     menu.add_selector('Type : ', [("TOTAL","TOTAL"),("LAYER","LAYER")], onchange=set_type)
+#     menu.add_button('Retour', start_the_game)
+#     menu.add_button('Quit', pygame_menu.events.EXIT)
+#     menu.mainloop(screen)
 
 
 
