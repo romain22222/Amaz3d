@@ -89,4 +89,17 @@ class Joueur:
         difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
         screen.blit(self.sprite,self.cadre)
     
+    def countObjInInv(self, obj):
+        count=0
+        for object in self.inventaire:
+            if object==obj:
+                count+=1
+        return str(count)
 
+    def printInventory(self, screen):
+        screen.blit(spriteKeys,cadreKeys)
+        screen.blit(spriteWb,cadreWb)
+        nbKeys = myfont.render(":"+self.countObjInInv('key'), False, RED)
+        screen.blit(nbKeys,(490, 720))
+        nbWb = myfont.render(":"+self.countObjInInv('wb'), False, RED)
+        screen.blit(nbWb,(690, 720))

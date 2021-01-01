@@ -17,13 +17,14 @@ class Timer():
     def __Init__(self):
         self.fpsClock = pygame.time.Clock()
         self.TpsZero = pygame.time.get_ticks() ## Départ
+        self.isMode2 = False
 
     def temps(self):
         difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
-        if MODESELECTED==1:
-            seconds = (pygame.time.get_ticks() - self.TpsZero) / 1000
-        elif MODESELECTED==2:
+        if self.isMode2:
             seconds = (self.TpsZero - pygame.time.get_ticks() + TEMPSINIT) / 1000
+        else:
+            seconds = (pygame.time.get_ticks() - self.TpsZero) / 1000
         return seconds
 
     def print_timer(self,screen,myfont):
