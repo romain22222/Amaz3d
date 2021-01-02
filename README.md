@@ -20,3 +20,15 @@ Celui-ci dit à Philidore : "Veuillez venir à bout de ces créations, afin de r
 Philidore, encore plus furieux, s'attela donc à la tâche de finir ces Labyr-- URHM ces Amaz3ds.
 
 Ce que ne savait pas Philidore, c'est qu'il y avait plein d'Amaz3ds, beaucoup d'Amaz3ds, au point que son épopée venait tout juste de commencer...
+
+# INSTALLATION
+
+- Tout d'abord : télécharger python : https://www.python.org/ftp/python/3.9.1/python-3.9.1-amd64.exe
+
+- Ensuite, après l'installation, allez dans l'invite de commandes windows et écrivez les lignes suivantes :
+
+  - python -m pip install pygame
+
+  - python -m pip install pygame_menu
+
+- Enfin pour lancer le jeu, il suffit de lancer via IDLE le fichier intitulé 'projetVisi.py'
