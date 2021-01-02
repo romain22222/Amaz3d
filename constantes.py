@@ -2,8 +2,16 @@ import pygame_menu
 import pygame
 import string
 
-# la taille de la fenetre
+# Taille de la fenetre
+
 size = width, height = 1200, 800
+
+# Initialisations
+
+pygame.init()
+pygame.font.init()
+screen = pygame.display.set_mode(size)
+pygame.key.set_repeat(60, 60)
 
 # Couleurs
 BLACK = (0, 0, 0)
@@ -49,7 +57,6 @@ themeLaby.background_color=BLACK
 themeLaby.title_shadow=True
 themeLaby.title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL
 themeLaby.widget_font=pygame_menu.font.FONT_MUNRO
-themeLaby.title_offset=(460,175)
 themeLaby.title_background_color=BLACK
 themeLaby.title_font=pygame_menu.font.FONT_MUNRO
 themeLaby.title_font_size=96
@@ -67,10 +74,9 @@ spriteWb = pygame.transform.scale(pygame.image.load("wall breaker.jpg"),(30,50))
 cadreWb = spriteWb.get_rect()
 cadreWb = cadreWb.move([650, 700])
 
-#Police en jeu
-pygame.font.init()
-myfont = pygame.font.SysFont('Comic Sans MS', 30)
+# Police en jeu
 
+myfont = pygame.font.SysFont('Comic Sans MS', 30)
 
 # Constantes sur le pseudo
 

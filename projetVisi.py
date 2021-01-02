@@ -11,12 +11,6 @@ import pygame_menu
 # https://github.com/TheAwesomePossum/StartPy/blob/3d6c824259fdf4e9e78e3138d2c9c0fecedf645f/Events.py
 # https://www.pygame.org/docs/ref/key.html#pygame.key.get_pressed
 
-pygame.init()
-
-screen = pygame.display.set_mode(size)
-
-pygame.key.set_repeat(60, 60)
-
 def set_difficulty(value, difficulty):
     with open('options.txt', 'r') as file:
         data = file.readlines()
@@ -38,15 +32,56 @@ def set_pseudo(value):
     with open('options.txt', 'w') as file:
         file.writelines(data)
 
-def set_type(value,type):
+def changeMenuHS():
+    global tempTableHS
+    with open('highscores.txt', 'r') as file:
+        hs = file.read()
+        hs = ast.literal_eval(hs)
+    with open('options.txt', 'r') as file:
+        opt = file.readlines()
+    hsImportant=hs[opt[3][:-1]][opt[5][:-1]][opt[4][:-1]]
+    tempTableHS = pygame_menu.Menu(800,1200,'Highscores',theme=themeLaby, columns=3, rows=len(hsImportant)+2,joystick_enabled=False)
+    
+    tempTableHS.add_label("Highscores",font_size=52,font_color=RED)
+    for pos in hsImportant.keys():  
+        tempTableHS.add_label(str(pos)+'.', font_size=40)
+    tempTableHS.add_label('', font_size=52)
+    
+    tempTableHS.add_label(opt[5][:-1]+' '+opt[4][:-1],font_size=52)
+    for couple in hsImportant.values():
+        tempTableHS.add_label(couple[0], font_size=40)
+    if len(hsImportant):
+        tempTableHS.add_label('', font_size=52)
+    else:
+        tempTableHS.add_label('Pas de temps encore enregistre', font_size=20, font_color=(127,127,127,127))
+    
+    tempTableHS.add_label(opt[3][:-1],font_size=52)
+    for couple in hsImportant.values():
+        tempTableHS.add_label(couple[1], font_size=40)
+    tempTableHS.add_button('Retour', menu)
+    tempTableHS.mainloop(screen)
+
+def set_type_hs(value,type):
     with open('options.txt', 'r') as file:
         data = file.readlines()
     data[3] = type+'\n'
     with open('options.txt', 'w') as file:
         file.writelines(data)
 
-def printHS():
-    pass #WIP
+def set_difficulty_hs(value, difficulty):
+    with open('options.txt', 'r') as file:
+        data = file.readlines()
+    data[4] = difficulty+'\n'
+    with open('options.txt', 'w') as file:
+        file.writelines(data)
+
+def set_mode_hs(value, mode):
+    with open('options.txt', 'r') as file:
+        data = file.readlines()
+    data[5] = mode+'\n'
+    with open('options.txt', 'w') as file:
+        file.writelines(data)
+
 
 def start_the_game():
     difficultyChosen, MODESELECTED, TEMPSINIT, BOOSTTIMEREDUCE, tailleLabyCube=chargeParams()
@@ -58,19 +93,26 @@ def start_the_game():
     checkHs('TOTAL',MODESELECTED,difficultyChosen,finalT,pseudo)
 
 def menu():
-    menuHS = pygame_menu.Menu(800, 1200, 'Highscores',theme=themeLaby)
+    set_difficulty('',"veryEasy")
+    set_mode('',"Contre-la-montre")
+    set_pseudo('Player')
+    set_type_hs('','TOTAL')
+    set_difficulty_hs('',"veryEasy")
+    set_mode_hs('',"Contre-la-montre")
+
+    menuHS = pygame_menu.Menu(800, 1200, 'Highscores',theme=themeLaby,joystick_enabled=False)
     menuHS.add_label("Highscores",font_size=96,font_color=RED)
     menuHS.add_vertical_margin(50)
-    menuHS.add_selector('Type : ', [("TOTAL","TOTAL"),("LAYER","LAYER")], onchange=set_type)
-    menuHS.add_selector('Mode : ', [("Contre-la-montre","Contre-la-montre"),("Temps limite","Temps limite")], onchange=set_mode)
-    menuHS.add_selector('Difficulty : ', [("veryEasy","veryEasy"),("easy","easy"),("medium","medium"),("hard","hard"),("challenge","challenge")], onchange=set_difficulty)
-    menuHS.add_button('Afficher les highscores correspondants', printHS())
+    menuHS.add_selector('Type : ', [("TOTAL","TOTAL"),("LAYER","LAYER")], onchange=set_type_hs)
+    menuHS.add_selector('Mode : ', [("Contre-la-montre","Contre-la-montre"),("Temps limite","Temps limite")], onchange=set_mode_hs)
+    menuHS.add_selector('Difficulty : ', [("veryEasy","veryEasy"),("easy","easy"),("medium","medium"),("hard","hard"),("challenge","challenge")], onchange=set_difficulty_hs)
+    menuHS.add_button('Afficher les highscores correspondants', changeMenuHS)
     menuHS.add_button('Retour', pygame_menu.events.BACK)
 
-    menu = pygame_menu.Menu(800, 1200, 'Amaz3d',theme=themeLaby)
+    menu = pygame_menu.Menu(800, 1200, 'Amaz3d',theme=themeLaby,joystick_enabled=False)
     menu.add_label("Amaz3d",font_size=96,font_color=RED)
     menu.add_vertical_margin(50)
-    menu.add_text_input('Joueur : ', default=initPseudo, maxchar=13, valid_chars=validChars, onchange=set_pseudo) #WIP
+    menu.add_text_input('Joueur : ', default=initPseudo, maxchar=13, valid_chars=validChars, onchange=set_pseudo)
     menu.add_selector('Difficulty : ', [("veryEasy","veryEasy"),("easy","easy"),("medium","medium"),("hard","hard"),("challenge","challenge")], onchange=set_difficulty)
     menu.add_selector('Mode : ', [("Contre-la-montre","Contre-la-montre"),("Temps limite","Temps limite")], onchange=set_mode)
     menu.add_button('Play', start_the_game)
@@ -130,9 +172,25 @@ def partie():
         if MODESELECTED==2 and chrono.temps() <= 0:
             break;
         time.sleep(0.05)
+    fTime=chrono.temps()
     if bestLap>pygame.time.get_ticks()-chronoLap.TpsZero:
         bestLap=pygame.time.get_ticks()-chronoLap.TpsZero
-    return bestLap, chrono.temps()
+    
+    screen.fill(BLACK)
+    finalS = myfont.render("Well played !", False, RED)
+    screen.blit(finalS,(490, 150))
+    pygame.display.flip()
+    time.sleep(1)
+    finalS = myfont.render("Votre temps total : "+str(fTime), False, RED)
+    screen.blit(finalS,(420, 300))
+    pygame.display.flip()
+    time.sleep(1)
+    finalS = myfont.render("Votre meilleur temps sur un étage : "+str(bestLap), False, RED)
+    screen.blit(finalS,(360, 450))
+    pygame.display.flip()
+    time.sleep(5)
+
+    return bestLap, fTime
 
 def checkHs(type,MODESELECTED,difficultyChosen,time,pseudo):
     with open('highscores.txt', 'r') as file:
@@ -159,10 +217,6 @@ def checkHs(type,MODESELECTED,difficultyChosen,time,pseudo):
     with open('highscores.txt', 'w') as file:
         file.write(str(highscores))
 
-set_difficulty('',"veryEasy")
-set_mode('',"Contre-la-montre")
-set_pseudo('Player')
-set_type('','TOTAL')
 
 def chargeParams():
     with open('options.txt', 'r') as file:

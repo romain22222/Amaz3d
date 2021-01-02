@@ -1,4 +1,6 @@
 veryEasy
 Contre-la-montre
 Player
-LAYER
+TOTAL
+veryEasy
+Contre-la-montre
